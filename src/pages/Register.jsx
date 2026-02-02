@@ -54,12 +54,12 @@ const Register = () => {
       ...formData,
       [e.target.name]: e.target.value,
     });
-    setErrors({
+    setErrors({ 
     ...errors,
     [e.target.name]:""
   })
   };
-
+     
   
   const handleSubmit = (e) =>{
     e.preventDefault();
