@@ -28,6 +28,9 @@ const Login = () => {
           Submit
         </button>
       </form>
+      <p className="link-text">
+        don't have an account? <Link to="/register" >Register here</Link>
+      </p>
     </div>
   );
 };
