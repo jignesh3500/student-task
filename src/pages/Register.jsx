@@ -55,12 +55,11 @@ const Register = () => {
       [e.target.name]: e.target.value,
     });
     setErrors({ 
-    ...errors,
+    ...errors,  
     [e.target.name]:""
   })
   };
      
-  
   const handleSubmit = (e) =>{
     e.preventDefault();
     if(validate()){
