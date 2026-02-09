@@ -3,15 +3,19 @@ import React from "react";
 const TaskList = ({ tasks, editingTask, deletingTask }) => {
   const handleEditClick = (task) => {
     editingTask(task);
-  }
-   const handleDeleteClick = (taskId) => {
+  };
+  const handleDeleteClick = (taskId) => {
     deletingTask(taskId);
-  }
+  };
   return (
     <>
       <div className="task-grid">
         {tasks.map((task) => (
-          <div key={task.id} className="task-card" style={{ position: "relative" }}>
+          <div
+            key={task.id}
+            className="task-card"
+            style={{ position: "relative" }}
+          >
             <h3>{task.title}</h3>
             <p>{task.description}</p>
 
@@ -44,7 +48,7 @@ const TaskList = ({ tasks, editingTask, deletingTask }) => {
                 className="btn-icon"
                 style={{ background: "#ff416c" }}
                 title="Delete Task"
-                onClick={()=> handleDeleteClick(task.id)}
+                onClick={() => handleDeleteClick(task.id, console.log(task.id))}
               >
                 🗑️
               </button>
