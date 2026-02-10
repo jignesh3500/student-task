@@ -1,15 +1,14 @@
-import React from "react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
-import TaskList from "../components/TaskList";
 import TaskForm from "../components/TaskForm";
+import TaskList from "../components/TaskList";
 
 const Dashboard = () => {
   const navigate = useNavigate();
   const [tasks, setTasks] = useState([]);
   const [editTask, setEditTask] = useState();
-  const [deleteTask, setDeleteTask] = useState();
+  const [showForm, setShowForm] = useState(false);
 
   const fetchData = async () => {
     try {
@@ -69,30 +68,54 @@ const Dashboard = () => {
     setEditTask(editingTask);
   };
 
-  const handleDeleteTask = async (taskId) => {
+  const handleDeleteTask = async (id) => {
     try {
-      await fetch(`http://localhost:3000/tasks/${taskId}`, {
+      await fetch(`http://localhost:3000/tasks/${id}`, {
         method: "DELETE",
       });
-      setTasks(tasks.filter((task) => task.id !== taskId));
+      setTasks(tasks.filter((task) => task.id !== id));
     } catch (error) {
       console.log(error);
     }
   };
+
+  const handleCompleteTask = async (id) => {
+    const taskToggle = tasks.find((task) => task.id === id);
+    const updatedTask = { ...taskToggle, completed: !taskToggle.completed };
+    try {
+      await fetch(`http://localhost:3000/tasks/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updatedTask),
+      });  
+       setTasks(tasks.map((task) => (task.id === id ? { ...updatedTask } : task)));
+    } catch (error) {
+      console.log(error);
+    } 
+  }
+
   return (
     <div>
-      <Navbar title="Task Management" onLogout={handleLogout} />
-      <TaskForm
-        addTask={handleAddTask}
-        updateTask={handleUpdateTask}
-        editingTask={editTask}
-        deleteTask={handleDeleteTask}
+      <Navbar
+        title="Task Management"
+        isFormOpen={showForm}
+        onAddTaskBtnClick={() => setShowForm(!showForm)}
+        onLogout={handleLogout}
       />
+      {showForm && (
+        <TaskForm
+          addTask={handleAddTask}
+          updateTask={handleUpdateTask}
+          editingTask={editTask}
+          deletingTask={handleDeleteTask}
+        />
+      )}
       <h1>MY TASKS</h1>
       <TaskList
         tasks={tasks}
         editingTask={editingTask}
         deletingTask={handleDeleteTask}
+        handleCompleteTask={handleCompleteTask}
       />
     </div>
   );
